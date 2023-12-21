@@ -8,7 +8,7 @@ class ASTNode
 {
 public:
     virtual ~ASTNode() = default;
-    // ´¿Ğéº¯Êı£¬ÓÃÓÚ¼ÆËã½ÚµãµÄÖµ
+    // çº¯è™šå‡½æ•°ï¼Œç”¨äºè®¡ç®—èŠ‚ç‚¹çš„å€¼
     virtual double eval() const = 0;
 };
 
@@ -94,9 +94,9 @@ public:
         NOT_EXP_TOKEN
     };
     TokenType getTokenType() const;
-    // Í¨¹ı´Ê·¨·ÖÎöÆ÷½Ó¿ÚgetToken»ñµÃÒ»¸ö¼ÇºÅ
+    // é€šè¿‡è¯æ³•åˆ†æå™¨æ¥å£getTokenè·å¾—ä¸€ä¸ªè®°å·
     void fetch();
-    // Æ¥Åäµ±Ç°¼ÇºÅ
+    // åŒ¹é…å½“å‰è®°å·
     void match(TokenType expected);
     void error(ErrorType error_type,TokenType expected=NONTOKEN);
 
