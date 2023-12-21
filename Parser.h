@@ -3,7 +3,6 @@
 
 #include "Lexer.h"
 #include <memory>
-#include <cinttypes>
 
 class ASTNode
 {

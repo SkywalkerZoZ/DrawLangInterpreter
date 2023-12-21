@@ -14,7 +14,7 @@ add_executable(DrawLangInterpreter
     DrawEngine.cpp
 )
 
-# ͼ�ο�
+# 图形库
 if(WIN32)
     target_link_libraries(DrawLangInterpreter PRIVATE gdi32)
 endif()

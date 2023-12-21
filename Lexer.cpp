@@ -1,5 +1,8 @@
 #include "Lexer.h"
 
+#include <cstdlib>
+#include <cctype>
+
 Lexer::Lexer(const std::string& src_file)
 {
 	fp = fopen(src_file.c_str(), "r");
@@ -36,49 +39,50 @@ void Lexer::backCh(char ch)
 }
 
 Token Lexer::checkToken(std::string n) {
-    auto it = token_tbl.find(n);
-    if (it != token_tbl.end()) {
-        // ����ҵ��ˣ����ض�Ӧ��Token
-        return it->second;
-    } 
+	auto it = token_tbl.find(n);
+	if (it != token_tbl.end())
+	{
+		// 如果找到了，返回对应的Token
+		return it->second;
+	}
 	else
 	{
-        // ���û�ҵ�������Ĭ��ERRORTOKEN
-        return Token();
-    }
+		// 如果没找到，返回默认ERRORTOKEN
+		return Token();
+	}
 }
 
 Token Lexer::getToken()
 {
-	//Ĭ��ERRORTOKEN
+	//默认ERRORTOKEN
 	Token token;
 	char ch;
-	// ��ռǺŻ�����
+	// 清空记号缓冲区
 	buf.clear();
-	// ���˿հ��ַ�
-	for (;;) // ��ѭ���������˵�Դ�����еĿո�TAB���س��ȷָ������ļ��������ؿռǺ�
+	// 过滤空白字符
+	for (;;) // 此循环用来过滤掉源程序中的空格、TAB、回车等分隔符，文件结束返回空记号
 	{
 		ch = getCh();
 		if (ch == EOF)
 		{
-			// �ļ��������ؿռǺ�
+			// 文件结束返回空记号
 			token.type = NONTOKEN;
 			return token;
 		}
 		if (ch == '\n')
 		{
-			// �к�+1
+			// 行号+1
 			lineNo++;
 		}
 		if (!isspace(ch))
 		{
-			// �����հ��ַ�������Ѿ�����üǺ�
+			// 遇到空白字符则表明已经读完该记号
 			break;
 		}
 	}
-	// ���뻺����
+	// 加入缓冲区
 	addBuf(ch);
-	// ƥ�� �������ؼ��֡�PI��E
+	// 匹配 函数、关键字、PI、E
 	if (isalpha(ch))
 	{
 		for (;;)
@@ -86,25 +90,25 @@ Token Lexer::getToken()
 			ch = getCh();
 			if (isalnum(ch))
 			{
-				// �������ĸ������
+				// 如果是字母或数字
 				addBuf(ch);
 			}
 			else
 				break;
 		}
-		// �˻ط���ĸ�����ַ�
+		// 退回非字母数字字符
 		backCh(ch);
-		// �ж��Ƿ��ڷ��ű���
+		// 判断是否在符号表中
 		token = checkToken(buf);
 		token.name = buf;
 		return token;
 	}
 	else if (isdigit(ch))
 	{
-		// ���ֿ�ͷ��ƥ�䳣��
+		// 数字开头，匹配常量
 		for (;;)
 		{
-			// תΪ��д
+			// 转为大写
 			ch = getCh();
 			if (isdigit(ch))
 				addBuf(ch);
@@ -131,7 +135,7 @@ Token Lexer::getToken()
 	}
 	else
 	{
-		// �������������
+		// 如果是其他符号
 		switch (ch)
 		{
 		case ';':
@@ -153,11 +157,11 @@ Token Lexer::getToken()
 			ch = getCh();
 			if (ch == '-')
 			{
-				// ����Ƿ���˫����ע��
+				// 检查是否是双减号注释
 
 				while (ch != '\n' && ch != EOF)
 				{
-					// һֱ������һ�еĵ�һ���ַ��������˻�
+					// 一直读到下一行的第一个字符并将其退回
 					ch = getCh();
 				}
 				backCh(ch);
@@ -173,10 +177,10 @@ Token Lexer::getToken()
 			ch = getCh();
 			if (ch == '/')
 			{
-				// ����Ƿ���˫б��ע��
+				// 检查是否是双斜杠注释
 				while (ch != '\n' && ch != EOF)
 				{
-					// һֱ������һ�еĵ�һ���ַ��������˻�
+					// 一直读到下一行的第一个字符并将其退回
 					ch = getCh();
 				}
 				backCh(ch);
@@ -192,13 +196,13 @@ Token Lexer::getToken()
 			ch = getCh();
 			if (ch == '*')
 			{
-				// ƥ���������
+				// 匹配幂运算符
 				token.type = POWER;
 				break;
 			}
 			else
 			{
-				// ƥ��˺�
+				// 匹配乘号
 				backCh(ch);
 				token.type = MUL;
 				break;

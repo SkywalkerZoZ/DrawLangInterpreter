@@ -3,9 +3,6 @@
 
 #include <cmath>
 #include <cstdio>
-#include <cstdlib>
-#include <cstring>
-#include <cctype>
 #include <cstdint>
 #include <string>
 #include <unordered_map>
@@ -35,13 +32,13 @@
         TOKEN(CONST_ID) \
         TOKEN(NONTOKEN) \
         TOKEN(ERRTOKEN)
-// Éú³ÉÃ¶¾Ù
+// ç”Ÿæˆæšä¸¾
 #define GENERATE_ENUM(ENUM) ENUM,
 enum TokenType {
     FOREACH_TOKEN(GENERATE_ENUM)
 };
 
-// Éú³ÉÃ¶¾Ù¶ÔÓ¦µÄstringÊı×é
+// ç”Ÿæˆæšä¸¾å¯¹åº”çš„stringæ•°ç»„
 #define GENERATE_STRING(STRING) #STRING,
 static std::string token_name[] = {
     FOREACH_TOKEN(GENERATE_STRING)
@@ -55,12 +52,12 @@ struct Token {
     TokenType type;
     std::string name;
     double value;
-    //ÊôĞÔ£¬º¯ÊıÖ¸Õë£¬´ú±íÒ»¸öÖ¸Ïò·µ»ØdoubleÖµ²¢´øÓĞÒ»¸ödoubleĞÎ²ÎµÄº¯ÊıµÄÖ¸ÕëµÄÀàĞÍ
+    //å±æ€§ï¼Œå‡½æ•°æŒ‡é’ˆï¼Œä»£è¡¨ä¸€ä¸ªæŒ‡å‘è¿”å›doubleå€¼å¹¶å¸¦æœ‰ä¸€ä¸ªdoubleå½¢å‚çš„å‡½æ•°çš„æŒ‡é’ˆçš„ç±»å‹
     MathFuncPtr math_func;
     Token() : type(ERRTOKEN),name("ERRTOKEN") ,value(0.0), math_func(nullptr) {}
     Token(TokenType t,std::string n,double v,MathFuncPtr f) : type(t),name(n) ,value(v), math_func(f) {}
     Token& operator=(const Token& other) {
-        //²»¶¨Òå¸³Öµ²Ù×÷·ûÔò¹¹ÔìToken»á³ö´í
+        //ä¸å®šä¹‰èµ‹å€¼æ“ä½œç¬¦åˆ™æ„é€ Tokenä¼šå‡ºé”™
         if (this != &other) {
             type = other.type;
             name = other.name;
@@ -72,7 +69,7 @@ struct Token {
 };
 
 
-//·ûºÅ±í
+//ç¬¦å·è¡¨
 static std::unordered_map<std::string, Token> token_tbl = {
     {"PI",     {CONST_ID, "PI",    3.1415926, nullptr}},
     {"E",      {CONST_ID, "E",     2.71828,   nullptr}},
@@ -107,7 +104,7 @@ public:
     Token getToken();
     uint64_t getLineNo() const;
 private:
-    //ĞĞºÅ
+    //è¡Œå·
     uint64_t lineNo = 1;
     FILE *fp;
     std::string buf;

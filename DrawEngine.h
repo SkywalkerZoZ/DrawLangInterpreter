@@ -12,9 +12,9 @@ public:
     void drawPixel(int x, int y);
     void setColor(COLORREF c);
 private:
-    // 绘制的窗口的句柄
+    // 缁樺埗鐨勭獥鍙ｇ殑鍙ユ焺
     HWND hwnd;
-    // 窗口的设备上下文
+    // 绐楀彛鐨勮澶囦笂涓嬫枃
     HDC hdc;
     COLORREF color;
     void createWindow() ;

@@ -1,10 +1,10 @@
 #include "DrawEngine.h"
 
-// Ä¬ÈÏÎªÀ¶É«
+// é»˜è®¤ä¸ºè“è‰²
 DrawEngine::DrawEngine() : color(RGB(0, 0, 255))
 {
     createWindow();
-    // »ñµÃÒ»¸öÉè±¸ÉÏÏÂÎÄÓÃÓÚ»æÍ¼
+    // è·å¾—ä¸€ä¸ªè®¾å¤‡ä¸Šä¸‹æ–‡ç”¨äºç»˜å›¾
     hdc = GetDC(hwnd);
 }
 
@@ -26,7 +26,7 @@ void DrawEngine::drawPixel(int x, int y)
 
 void DrawEngine::createWindow()
 {
-    // ×¢²á´°¿ÚÀà
+    // æ³¨å†Œçª—å£ç±»
     const char *CLASS_NAME = "DrawEngineWindowClass";
 
     WNDCLASS wc = {};
@@ -42,16 +42,16 @@ void DrawEngine::createWindow()
     hwnd = CreateWindowEx(
         0,
         CLASS_NAME,
-        // ´°¿Ú±êÌâ
-        "Draw»æÍ¼½âÊÍ",
-        // ½ûÓÃ×î´ó»¯°´Å¥£¬²»ÄÜ¸Ä±ä´°¿Ú´óĞ¡
+        // çª—å£æ ‡é¢˜
+        "Draw",
+        // ç¦ç”¨æœ€å¤§åŒ–æŒ‰é’®ï¼Œä¸èƒ½æ”¹å˜çª—å£å¤§å°
         WS_SYSMENU | WS_MINIMIZEBOX,
         CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
         nullptr, nullptr, wc.hInstance, nullptr);
 
     if (!hwnd)
     {
-        // ´¦Àí´íÎó£¬ÀıÈçÍ¨¹ıµ¯³öÒ»¸ö´íÎóÏûÏ¢¿ò
+        // å¤„ç†é”™è¯¯ï¼Œä¾‹å¦‚é€šè¿‡å¼¹å‡ºä¸€ä¸ªé”™è¯¯æ¶ˆæ¯æ¡†
         MessageBoxW(nullptr, L"Failed to create window", L"Error", MB_OK);
         exit(EXIT_FAILURE);
     }
@@ -59,10 +59,10 @@ void DrawEngine::createWindow()
     ShowWindow(hwnd, SW_SHOW);
 }
 
-// ÓÃÓÚ´¦Àí´°¿ÚµÄÏûÏ¢
-// ´¦Àí WM_DESTROY ÏûÏ¢À´ÏìÓ¦´°¿ÚÏú»Ù
-// ´¦ÀíWM_PAINT ÏûÏ¢À´´¦Àí»æÍ¼ÇëÇó
-// ´¦ÀíÆäËûÎ´´¦ÀíµÄÏûÏ¢½«ÓÉ DefWindowProc º¯Êı´¦Àí
+// ç”¨äºå¤„ç†çª—å£çš„æ¶ˆæ¯
+// å¤„ç† WM_DESTROY æ¶ˆæ¯æ¥å“åº”çª—å£é”€æ¯
+// å¤„ç†WM_PAINT æ¶ˆæ¯æ¥å¤„ç†ç»˜å›¾è¯·æ±‚
+// å¤„ç†å…¶ä»–æœªå¤„ç†çš„æ¶ˆæ¯å°†ç”± DefWindowProc å‡½æ•°å¤„ç†
 LRESULT DrawEngine::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch (uMsg)
@@ -71,7 +71,7 @@ LRESULT DrawEngine::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
         PostQuitMessage(0);
         return 0;
     case WM_PAINT:
-        // ¿ÉÒÔÔÚÕâÀï´¦Àí»æÍ¼
+        // å¯ä»¥åœ¨è¿™é‡Œå¤„ç†ç»˜å›¾
         break;
     }
 

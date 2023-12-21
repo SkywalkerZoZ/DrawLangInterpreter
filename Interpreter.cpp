@@ -3,11 +3,11 @@
 
 void Interpreter::interpProgram()
 {
-    //Æ¥Åä³ÌĞòÄÚ¶à¸öÓï¾ä
+    //åŒ¹é…ç¨‹åºå†…å¤šä¸ªè¯­å¥
     while(parser.getTokenType()!=NONTOKEN)
     {
         interpStatement();
-        //Æ¥Åä·Ö¸ô·û
+        //åŒ¹é…åˆ†éš”ç¬¦
         parser.match(SEMICO);
     }
 }
@@ -77,19 +77,19 @@ void Interpreter::interpFor()
     draw();
 }
 
-// Í¼ĞÎµÄ±ä»»Ë³Ğò×ÜÊÇ£º±ÈÀı±ä»» -> Ğı×ª±ä»» -> Æ½ÒÆ±ä»» 
+// å›¾å½¢çš„å˜æ¢é¡ºåºæ€»æ˜¯ï¼šæ¯”ä¾‹å˜æ¢ -> æ—‹è½¬å˜æ¢ -> å¹³ç§»å˜æ¢ 
 void Interpreter::calCoord(const NodePtr &h,const NodePtr &v,double &x,double &y)
 {
     x=h->eval();
     y=v->eval();
-    //±ÈÀı±ä»»
+    //æ¯”ä¾‹å˜æ¢
     x*=scale_x;
     y*=scale_y;
-    //Ğı×ª±ä»»
+    //æ—‹è½¬å˜æ¢
     double tmp_x=x;
     x=x*cos(rot_agl)+y*sin(rot_agl);
     y=y*cos(rot_agl)-tmp_x*sin(rot_agl);
-    //Æ½ÒÆ±ä»»
+    //å¹³ç§»å˜æ¢
     x+=origin_x;
     y+=origin_y;
 }

@@ -5,11 +5,11 @@ int main()
     Lexer lx("test.txt");
     Parser ps(lx);
     DrawEngine de;
-    // 黑色
+    // 榛戣壊
     de.setColor(RGB(0, 0, 0));
     Interpreter itp(ps,de);
     itp.run();
-    // 运行消息循环
+    // 杩愯娑堟伅寰幆
     MSG msg;
     while (GetMessage(&msg, nullptr, 0, 0)) {
         TranslateMessage(&msg);

@@ -1,6 +1,7 @@
 #include "Parser.h"
+#include <cinttypes>
 
-double TNode::param = 0;  // ¾²Ì¬³ÉÔ±±äÁ¿¶¨Òå
+double TNode::param = 0;  // é™æ€æˆå‘˜å˜é‡å®šä¹‰
 
 TokenType Parser::getTokenType() const
 {
@@ -23,7 +24,7 @@ void Parser::match(TokenType expected)
     {
         error(ErrorType::NOT_EXP_TOKEN,expected);
     }
-    //»ñÈ¡ÏÂÒ»¸ö¼ÇºÅ
+    //è·å–ä¸‹ä¸€ä¸ªè®°å·
     fetch();
 }
 void Parser::error(ErrorType error_type,TokenType expected)
@@ -48,7 +49,7 @@ NodePtr Parser::parseExpression()
     TokenType tk_tmp;
     while(cur_token.type == PLUS || cur_token.type == MINUS)
     {
-        //¼ÇÂ¼µ±Ç°¼ÇºÅ£¬ÒòÎªmatch»á¸Ä±äcur_token
+        //è®°å½•å½“å‰è®°å·ï¼Œå› ä¸ºmatchä¼šæ”¹å˜cur_token
         tk_tmp=cur_token.type;
         match(tk_tmp);
         right = parseTerm();
@@ -74,23 +75,23 @@ NodePtr Parser::parseFactor()
 {
     NodePtr left,right;
     if (cur_token.type == PLUS)
-	{
-        //Æ¥ÅäÒ»Ôª¼ÓÔËËã
+    {
+        //åŒ¹é…ä¸€å…ƒåŠ è¿ç®—
 		match(PLUS);
 		right = parseFactor();
 	}
-	else if (cur_token.type == MINUS)
-	{
-		// Ò»Ôª¼õÔËËã
+    else if (cur_token.type == MINUS)
+    {
+		// ä¸€å…ƒå‡è¿ç®—
 		// -2 = 0 - 2
 		match(MINUS);
 		right = parseFactor();
         left=std::make_unique<ConstNode>(0.0);
 		right = std::make_unique<BinOpNode>(MINUS, std::move(left), std::move(right));
 	}
-	else
+    else
     {
-        //Æ¥Åä·ÇÖÕ½á·ûComponent
+        //åŒ¹é…éç»ˆç»“ç¬¦Component
         right = parseComponent();
     }
 	return right;
@@ -110,7 +111,7 @@ NodePtr Parser::parseComponent()
 NodePtr Parser::parseAtom()
 {
     NodePtr ad;
-    //¼ÇÂ¼µ±Ç°¼ÇºÅ
+    //è®°å½•å½“å‰è®°å·
     Token tk_tmp=cur_token;
     switch (cur_token.type)
     {
@@ -120,7 +121,6 @@ NodePtr Parser::parseAtom()
         break;
     case T:
         match(T);
-        //TODO
         ad=std::make_unique<TNode>();
         break;
     case FUNC:
