@@ -296,7 +296,6 @@ DIV = "/"
 POWER = "**"
 CONST_ID = digit+("." digit*)?
 ID = letter+(letter|digit)*
-
 ```
 
 
@@ -347,8 +346,258 @@ Atom->
 
 
 
-## OOP实现
+
+
+
+
+
+
+## 原创工作
+
+
+
+
+
+
+
+**OOP**
+
+使用OOP面向对象思想实现
 
 
 
 ![interpreter.drawio](./img/interpreter.drawio.png)
+
+
+
+
+
+
+
+**符号表**
+
+使用哈希表实现，查找效率更高
+
+```c++
+//符号表，使用哈希表实现
+static std::unordered_map<std::string, Token> token_tbl = {
+    {"PI",     {CONST_ID, "PI",    3.1415926, nullptr}},
+    {"E",      {CONST_ID, "E",     2.71828,   nullptr}},
+    {"T",      {T,        "T",     0.0,       nullptr}},
+    {"SIN",    {FUNC,     "SIN",   0.0,       std::sin}},
+    {"COS",    {FUNC,     "COS",   0.0,       std::cos}},
+    {"TAN",    {FUNC,     "TAN",   0.0,       std::tan}},
+    {"LN",     {FUNC,     "LN",    0.0,       std::log}},
+    {"EXP",    {FUNC,     "EXP",   0.0,       std::exp}},
+    {"SQRT",   {FUNC,     "SQRT",  0.0,       std::sqrt}},
+    {"ORIGIN", {ORIGIN,   "ORIGIN",0.0,       nullptr}},
+    {"SCALE",  {SCALE,    "SCALE", 0.0,       nullptr}},
+    {"ROT",    {ROT,      "ROT",   0.0,       nullptr}},
+    {"IS",     {IS,       "IS",    0.0,       nullptr}},
+    {"FOR",    {FOR,      "FOR",   0.0,       nullptr}},
+    {"FROM",   {FROM,     "FROM",  0.0,       nullptr}},
+    {"TO",     {TO,       "TO",    0.0,       nullptr}},
+    {"STEP",   {STEP,     "STEP",  0.0,       nullptr}},
+    {"DRAW",   {DRAW,     "DRAW",  0.0,       nullptr}}
+};
+```
+
+
+
+**宏**
+
+```c++
+//宏定义，便于维护枚举和字符串数组
+#define FOREACH_TOKEN(TOKEN) \
+        TOKEN(ORIGIN)   \
+        TOKEN(SCALE)    \
+        TOKEN(ROT)      \
+        TOKEN(IS)       \
+        TOKEN(TO)       \
+        TOKEN(STEP)     \
+        TOKEN(DRAW)     \
+        TOKEN(FOR)      \
+        TOKEN(FROM)     \
+        TOKEN(T)        \
+        TOKEN(SEMICO)   \
+        TOKEN(L_BRACKET)\
+        TOKEN(R_BRACKET)\
+        TOKEN(COMMA)    \
+        TOKEN(PLUS)     \
+        TOKEN(MINUS)    \
+        TOKEN(MUL)      \
+        TOKEN(DIV)      \
+        TOKEN(POWER)    \
+        TOKEN(FUNC)     \
+        TOKEN(CONST_ID) \
+        TOKEN(NONTOKEN) \
+        TOKEN(ERRTOKEN)
+// 生成枚举
+#define GENERATE_ENUM(ENUM) ENUM,
+enum TokenType {
+    FOREACH_TOKEN(GENERATE_ENUM)
+};
+
+// 生成枚举对应的string数组
+#define GENERATE_STRING(STRING) #STRING,
+static std::string token_name[] = {
+    FOREACH_TOKEN(GENERATE_STRING)
+};
+
+```
+
+
+
+利用string数组输出更友好的报错信息
+
+```c++
+void Parser::error(ErrorType error_type,TokenType expected)
+{
+    switch (error_type)
+    {
+    case ErrorType::INVALID_TOKEN:
+        
+        printf("line %" PRIu64 ": invalid token %s\n", lexer.getLineNo(), cur_token.name.c_str());
+        break;
+    case ErrorType::NOT_EXP_TOKEN:
+        printf("line %" PRIu64 ": not expected token %s, expected %s\n", lexer.getLineNo(), cur_token.name.c_str(),token_name[expected].c_str());
+        break;
+    default:
+        break;
+    }
+    exit(EXIT_FAILURE);
+}
+```
+
+
+
+
+
+**语法树**
+
+使用抽象类ASTNode构造语法树，BinOpNode、ConstNode、TNode、FuncNode均继承自ASTNode
+
+TNode中使用param作为静态成员变量，使得每个TNode共享同样的参数值
+
+```cpp
+class ASTNode
+{
+public:
+    virtual ~ASTNode() = default;
+    // 纯虚函数，用于计算节点的值
+    virtual double eval() const = 0;
+};
+//语法树节点指针
+using NodePtr = std::unique_ptr<ASTNode>;
+//二元运算符
+class BinOpNode : public ASTNode
+{
+public:
+    explicit BinOpNode(TokenType o, NodePtr l, NodePtr r)
+        : left(std::move(l)), op(o), right(std::move(r)) {}
+    double eval() const override
+    {
+        switch (op)
+        {
+        case PLUS:
+            return left->eval() + right->eval();
+        case MINUS:
+            return left->eval() - right->eval();
+        case MUL:
+            return left->eval() * right->eval();
+        case DIV:
+            return left->eval() / right->eval();
+        case POWER:
+            return pow(left->eval(), right->eval());
+        default:
+            return 0.0;
+        }
+    }
+
+private:
+    TokenType op;
+    NodePtr left;
+    NodePtr right;
+};
+
+//常数
+class ConstNode : public ASTNode
+{
+public:
+    explicit ConstNode(double v) : val(v) {}
+    double eval() const override
+    {
+        return val;
+    }
+
+private:
+    double val;
+};
+
+//参数
+class TNode : public ASTNode
+{
+public:
+    //所有的TNode应当共享一个param
+    static double param;
+    double eval() const override
+    {
+        return param;
+    }
+
+};
+
+//函数
+class FuncNode : public ASTNode
+{
+public:
+    FuncNode(MathFuncPtr f, NodePtr c) : func(f), child(std::move(c)) {}
+    double eval() const override
+    {
+        return (*func)(child->eval());
+    }
+
+private:
+    MathFuncPtr func;
+    NodePtr child;
+};
+```
+
+
+
+**内存管理**
+
+使用智能指针进行节点内存管理
+
+```c++
+using NodePtr = std::unique_ptr<ASTNode>;
+```
+
+
+
+**绘图引擎**
+
+使用DrawEngine创建Windows窗口并向interpreter提供绘制接口
+
+```c++
+class DrawEngine {
+public:
+    DrawEngine();
+
+    ~DrawEngine();
+
+    void drawPixel(int x, int y);
+    void setColor(COLORREF c);
+private:
+    // 绘制的窗口的句柄
+    HWND hwnd;
+    // 窗口的设备上下文
+    HDC hdc;
+    // 默认为蓝色
+    COLORREF color;
+    void createWindow();
+    // 处理窗口消息
+    static LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+};
+```
+
