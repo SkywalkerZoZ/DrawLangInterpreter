@@ -1,7 +1,7 @@
 #include "Parser.h"
 #include <cinttypes>
 
-double TNode::param = 0;  // 静态成员变量定义
+double TNode::param = 0.0;  // 静态成员变量定义
 
 TokenType Parser::getTokenType() const
 {
@@ -44,36 +44,34 @@ void Parser::error(ErrorType error_type,TokenType expected)
 }
 NodePtr Parser::parseExpression()
 {
-    NodePtr left,right;
-    left = parseTerm();
+    NodePtr left = parseTerm();
     TokenType tk_tmp;
     while(cur_token.type == PLUS || cur_token.type == MINUS)
     {
         //记录当前记号，因为match会改变cur_token
         tk_tmp=cur_token.type;
         match(tk_tmp);
-        right = parseTerm();
+        NodePtr right = parseTerm();
         left = std::make_unique<BinOpNode>(tk_tmp,std::move(left), std::move(right));
     }
     return left;
 }
 NodePtr Parser::parseTerm()
 {
-    NodePtr left,right;
-    left = parseFactor();
+    NodePtr left = parseFactor();
     TokenType tk_tmp;
     while(cur_token.type == MUL || cur_token.type == DIV)
     {
         tk_tmp=cur_token.type;
         match(tk_tmp);
-        right = parseFactor();
+        NodePtr right = parseFactor();
         left = std::make_unique<BinOpNode>(tk_tmp,std::move(left), std::move(right));
     }
     return left;
 }
 NodePtr Parser::parseFactor()
 {
-    NodePtr left,right;
+    NodePtr right;
     if (cur_token.type == PLUS)
     {
         //匹配一元加运算
@@ -82,11 +80,11 @@ NodePtr Parser::parseFactor()
 	}
     else if (cur_token.type == MINUS)
     {
-		// 一元减运算
+		// 一元减运算，需要left
 		// -2 = 0 - 2
 		match(MINUS);
 		right = parseFactor();
-        left=std::make_unique<ConstNode>(0.0);
+        NodePtr left=std::make_unique<ConstNode>(0.0);
 		right = std::make_unique<BinOpNode>(MINUS, std::move(left), std::move(right));
 	}
     else
@@ -98,12 +96,11 @@ NodePtr Parser::parseFactor()
 }
 NodePtr Parser::parseComponent()
 {
-    NodePtr left,right;
-    left=parseAtom();
+    NodePtr left=parseAtom();
     if(cur_token.type==POWER)
     {
         match(POWER);
-        right=parseComponent();
+        NodePtr right=parseComponent();
         left=std::make_unique<BinOpNode>(POWER,std::move(left), std::move(right));
     }
     return left;

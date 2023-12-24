@@ -3,6 +3,8 @@
 
 #include <Windows.h>
 #include <tchar.h>
+
+//创建Windows窗口并向interpreter提供绘制接口
 class DrawEngine {
 public:
     DrawEngine();
@@ -16,9 +18,10 @@ private:
     HWND hwnd;
     // 窗口的设备上下文
     HDC hdc;
+    // 默认为蓝色
     COLORREF color;
-    void createWindow() ;
-
+    void createWindow();
+    // 处理窗口消息
     static LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 };
 

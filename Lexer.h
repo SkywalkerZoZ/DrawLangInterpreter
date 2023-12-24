@@ -7,7 +7,7 @@
 #include <string>
 #include <unordered_map>
 
-
+//宏定义，便于维护枚举和字符串数组
 #define FOREACH_TOKEN(TOKEN) \
         TOKEN(ORIGIN)   \
         TOKEN(SCALE)    \
@@ -47,7 +47,7 @@ static std::string token_name[] = {
 
 using MathFuncPtr = double(*)(double);
 
-
+//记号
 struct Token {
     TokenType type;
     std::string name;
@@ -69,7 +69,7 @@ struct Token {
 };
 
 
-//符号表
+//符号表，使用哈希表实现
 static std::unordered_map<std::string, Token> token_tbl = {
     {"PI",     {CONST_ID, "PI",    3.1415926, nullptr}},
     {"E",      {CONST_ID, "E",     2.71828,   nullptr}},
@@ -91,17 +91,22 @@ static std::unordered_map<std::string, Token> token_tbl = {
     {"DRAW",   {DRAW,     "DRAW",  0.0,       nullptr}}
 };
 
-
+//完成词法分析，将源程序分解成记号流,向parser提供记号流
 class Lexer {
 public:
     explicit Lexer(const std::string& src_file);
     ~Lexer();
+    //读取一个字符
     char getCh();
-
+    //添加到缓存区
     void addBuf(char ch);
+    //退回到缓存区
     void backCh(char ch);
+    //检查记号是否合法
     Token checkToken(std::string n);
+    //读取一个记号
     Token getToken();
+    //获取行号
     uint64_t getLineNo() const;
 private:
     //行号

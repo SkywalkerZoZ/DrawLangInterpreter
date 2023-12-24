@@ -4,17 +4,23 @@
 #include "Parser.h"
 #include "DrawEngine.h"
 
+// 将parser提供的语法分析树进行语义分析，并使用draw_eng进行绘制
 class Interpreter
 {
 private:
     Parser &parser;
     DrawEngine &draw_eng;
+    // T
     double &param;
+    // ORIGIN IS ($origin_x, $origin_y); 
     double origin_x;
     double origin_y;
+    // SCALE IS ($scale_x, $scale_y);
     double scale_x;
     double scale_y;
+    // ROT IS $rot_agl;
     double rot_agl;
+    // FOR T FROM $start TO $end STEP $step DRAW ($draw_x, $draw_y);
     double start;
     double end;
     double step;
@@ -31,8 +37,11 @@ public:
     void interpScale();
     void interpRot();
     void interpFor();
+    //根据计算坐标
     void calCoord(const NodePtr &h,const NodePtr &v,double &x,double &y);
+    //根据计算的坐标使用draw_eng进行绘制
     void draw();
+    //运行解释器
     void run();
 };
 

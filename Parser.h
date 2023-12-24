@@ -4,6 +4,7 @@
 #include "Lexer.h"
 #include <memory>
 
+//语法树
 class ASTNode
 {
 public:
@@ -11,8 +12,9 @@ public:
     // 纯虚函数，用于计算节点的值
     virtual double eval() const = 0;
 };
-
+//语法树节点指针
 using NodePtr = std::unique_ptr<ASTNode>;
+//二元运算符
 class BinOpNode : public ASTNode
 {
 public:
@@ -43,6 +45,7 @@ private:
     NodePtr right;
 };
 
+//常数
 class ConstNode : public ASTNode
 {
 public:
@@ -56,9 +59,11 @@ private:
     double val;
 };
 
+//参数
 class TNode : public ASTNode
 {
 public:
+    //所有的TNode应当共享一个param
     static double param;
     double eval() const override
     {
@@ -67,6 +72,7 @@ public:
 
 };
 
+//函数
 class FuncNode : public ASTNode
 {
 public:
@@ -81,10 +87,12 @@ private:
     NodePtr child;
 };
 
+// 构建语法分析树，向interpreter提供语法分析树
 class Parser
 {
 private:
     Lexer &lexer;
+    //当前记号
     Token cur_token;
 public:
     explicit Parser(Lexer &lex): lexer(lex){};
@@ -98,8 +106,8 @@ public:
     void fetch();
     // 匹配当前记号
     void match(TokenType expected);
+    // 报错
     void error(ErrorType error_type,TokenType expected=NONTOKEN);
-
     NodePtr parseExpression();
     NodePtr parseTerm();
     NodePtr parseFactor();

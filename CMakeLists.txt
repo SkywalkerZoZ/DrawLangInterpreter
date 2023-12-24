@@ -4,13 +4,11 @@ project(DrawLangInterpreter VERSION 0.1.0 LANGUAGES C CXX)
 include(CTest)
 enable_testing()
 
-
-
-add_executable(DrawLangInterpreter 
-    main.cpp 
-    Lexer.cpp 
-    Parser.cpp 
-    Interpreter.cpp 
+add_executable(DrawLangInterpreter
+    main.cpp
+    Lexer.cpp
+    Parser.cpp
+    Interpreter.cpp
     DrawEngine.cpp
 )
 
