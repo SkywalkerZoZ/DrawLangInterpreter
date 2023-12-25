@@ -1,6 +1,6 @@
 #include "DrawEngine.h"
 
-DrawEngine::DrawEngine() : color(RGB(0, 0, 255))
+DrawEngine::DrawEngine() : color(RGB(0, 0, 0))
 {
     createWindow();
     // 获得一个设备上下文用于绘图

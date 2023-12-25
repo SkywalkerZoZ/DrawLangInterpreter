@@ -26,6 +26,10 @@ private:
     double step;
     NodePtr draw_x;
     NodePtr draw_y;
+    // COLOR IS ($color_r, $color_g, $color_b);
+    double color_r;
+    double color_g;
+    double color_b;
 public:
     explicit Interpreter(Parser &p,DrawEngine &de) 
     : parser(p),draw_eng(de), 
@@ -37,6 +41,7 @@ public:
     void interpScale();
     void interpRot();
     void interpFor();
+    void interColor();
     //根据计算坐标
     void calCoord(const NodePtr &h,const NodePtr &v,double &x,double &y);
     //根据计算的坐标使用draw_eng进行绘制

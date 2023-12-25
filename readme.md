@@ -372,6 +372,30 @@ Atom->
 
 
 
+**支持COLOR语句**
+
+```c++
+void Interpreter::interColor()
+{
+    parser.match(COLOR);
+    parser.match(IS);
+    parser.match(L_BRACKET);
+    color_r=parser.parseExpression()->eval();
+    parser.match(COMMA);
+    color_g=parser.parseExpression()->eval();
+    parser.match(COMMA);
+    color_b=parser.parseExpression()->eval();
+    parser.match(R_BRACKET);
+    draw_eng.setColor(RGB(color_r, color_g, color_b));
+}
+```
+
+
+
+展示
+
+![draw](./img/draw.png)
+
 
 
 **符号表**

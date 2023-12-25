@@ -27,6 +27,9 @@ void Interpreter::interpStatement()
         case FOR:
             interpFor();
             break;
+        case COLOR:
+            interColor();
+            break;
         default:
             parser.error(Parser::ErrorType::NOT_EXP_TOKEN);
             break;
@@ -76,7 +79,19 @@ void Interpreter::interpFor()
     parser.match(R_BRACKET);
     draw();
 }
-
+void Interpreter::interColor()
+{
+    parser.match(COLOR);
+    parser.match(IS);
+    parser.match(L_BRACKET);
+    color_r=parser.parseExpression()->eval();
+    parser.match(COMMA);
+    color_g=parser.parseExpression()->eval();
+    parser.match(COMMA);
+    color_b=parser.parseExpression()->eval();
+    parser.match(R_BRACKET);
+    draw_eng.setColor(RGB(color_r, color_g, color_b));
+}
 // 图形的变换顺序总是：比例变换 -> 旋转变换 -> 平移变换 
 void Interpreter::calCoord(const NodePtr &h,const NodePtr &v,double &x,double &y)
 {
