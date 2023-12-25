@@ -32,11 +32,13 @@ void Parser::error(ErrorType error_type,TokenType expected)
     switch (error_type)
     {
     case ErrorType::INVALID_TOKEN:
-        printf("line %" PRIu64 ": invalid token %s\n", lexer.getLineNo(), cur_token.name.c_str());
+        printf("line %" PRIu64 ": invalid token %s\n", 
+        lexer.getLineNo(), cur_token.name.c_str());
         break;
     case ErrorType::NOT_EXP_TOKEN:
         //利用string数组输出更友好的报错信息
-        printf("line %" PRIu64 ": not expected token %s, expected %s\n", lexer.getLineNo(), cur_token.name.c_str(),token_name[expected].c_str());
+        printf("line %" PRIu64 ": not expected token %s, expected %s\n", 
+        lexer.getLineNo(), cur_token.name.c_str(),token_name[expected].c_str());
         break;
     default:
         break;

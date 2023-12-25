@@ -2,7 +2,6 @@
 #define DRAWENGINE_H
 
 #include <Windows.h>
-#include <tchar.h>
 
 //创建Windows窗口并向interpreter提供绘制接口
 class DrawEngine {
