@@ -6,7 +6,7 @@ int main()
     Parser ps(lx);
     DrawEngine de;
     // 蓝色
-    // de.setColor(RGB(0, 0, 255));
+    de.setColor(RGB(0, 0, 255));
     Interpreter itp(ps,de);
     itp.run();
     // 运行消息循环

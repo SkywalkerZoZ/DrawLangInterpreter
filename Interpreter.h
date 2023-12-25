@@ -3,6 +3,7 @@
 
 #include "Parser.h"
 #include "DrawEngine.h"
+#include <cstdint>
 
 // 将parser提供的语法分析树进行语义分析，并使用draw_eng进行绘制
 class Interpreter
@@ -27,9 +28,9 @@ private:
     NodePtr draw_x;
     NodePtr draw_y;
     // COLOR IS ($color_r, $color_g, $color_b);
-    double color_r;
-    double color_g;
-    double color_b;
+    uint8_t color_r;
+    uint8_t color_g;
+    uint8_t color_b;
 public:
     explicit Interpreter(Parser &p,DrawEngine &de) 
     : parser(p),draw_eng(de), 
