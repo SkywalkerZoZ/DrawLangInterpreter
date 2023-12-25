@@ -18,7 +18,7 @@ private:
     HWND hwnd;
     // 窗口的设备上下文
     HDC hdc;
-    // 默认为蓝色
+    // 默认为黑色
     COLORREF color;
     void createWindow();
     // 处理窗口消息
