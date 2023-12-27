@@ -30,6 +30,15 @@ void Interpreter::interpStatement()
         case COLOR:
             interColor();
             break;
+        case CLEAR:
+            interClear();
+            break;
+        case SLEEP:
+            interSleep();
+            break;
+        case PTSIZE:
+            interPtsize();
+            break;
         default:
             parser.error(Parser::ErrorType::NOT_EXP_TOKEN);
             break;
@@ -92,6 +101,30 @@ void Interpreter::interColor()
     parser.match(R_BRACKET);
     draw_eng.setColor(RGB(color_r, color_g, color_b));
 }
+
+void Interpreter::interClear()
+{
+    parser.match(CLEAR);
+    draw_eng.clearWindow();
+}
+
+void Interpreter::interSleep()
+{
+    parser.match(SLEEP);
+    parser.match(L_BRACKET);
+    int time=parser.parseExpression()->eval();
+    parser.match(R_BRACKET);
+    Sleep(time);
+}
+
+void Interpreter::interPtsize()
+{
+    parser.match(PTSIZE);
+    parser.match(IS);
+    ptsize=parser.parseExpression()->eval();
+
+}
+
 // 图形的变换顺序总是：比例变换 -> 旋转变换 -> 平移变换 
 void Interpreter::calCoord(const NodePtr &h,const NodePtr &v,double &x,double &y)
 {
@@ -115,8 +148,7 @@ void Interpreter::draw()
     for(param=start;param<=end;param+=step)
     {
         calCoord(draw_x,draw_y,x,y);
-        // printf("%lf %lf\n",x,y);
-        draw_eng.drawPixel(x,y);
+        draw_eng.drawPixel(x,y,ptsize);
     }
 }
 

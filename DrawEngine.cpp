@@ -1,5 +1,4 @@
 #include "DrawEngine.h"
-
 DrawEngine::DrawEngine() : color(RGB(0, 0, 0))
 {
     createWindow();
@@ -18,9 +17,27 @@ void DrawEngine::setColor(COLORREF c)
     color = c;
 }
 
-void DrawEngine::drawPixel(int x, int y)
+void DrawEngine::drawPixel(int x, int y, uint8_t size)
 {
-    SetPixel(hdc, x, y, color);
+    int left = x - size / 2;
+    int top = y - size / 2;
+    int right = left + size;
+    int bottom = top + size;
+
+    RECT rect = { left, top, right, bottom };
+    HBRUSH hBrush = CreateSolidBrush(color);
+    FillRect(hdc, &rect, hBrush);
+    DeleteObject(hBrush);
+}
+
+
+void DrawEngine::clearWindow()
+{
+    RECT clientRect;
+    GetClientRect(hwnd, &clientRect);
+    HBRUSH hBrush = CreateSolidBrush(RGB(255, 255, 255));
+    FillRect(hdc, &clientRect, hBrush);
+    DeleteObject(hBrush);
 }
 
 void DrawEngine::createWindow()

@@ -1,4 +1,5 @@
 --------------- 图形1：
+color is (0,0,255);  --蓝色
 origin is (20, 200);									-- 设置原点的偏移量
 rot is 0;												-- 不旋转
 scale is (40, 40);										-- 设置比例
@@ -7,8 +8,11 @@ origin is (20, 240);									-- 下移40单位
 for T from 0 to 2*pi step pi/50 draw (t, -sin(t));		-- 画T的轨迹
 origin is (20, 280);									-- 再下移40单位
 for T from 0 to 2*pi step pi/50 draw (t, -sin(t));		-- 画T的轨迹
-color is (0,255,0);
+sleep(1000);   --保持一秒
+clear;
 --------------- 图形2：
+color is (0,255,0);  --绿色
+ptsize is 2;
 origin is (380, 240);									-- 右移
 scale is (80, 80/3);									-- y方向压缩为三分之一
 rot is pi/2+0*pi/3 ;									-- 旋转初值设置
@@ -17,8 +21,11 @@ rot is pi/2+2*pi/3;										-- 旋转2/3*pi
 for T from -pi to pi step pi/50 draw (cos(t), sin(t));	-- 画T的轨迹
 rot is pi/2-2*pi/3;										-- 再旋转2/3*pi
 for T from -pi to pi step pi/50 draw (cos(t), sin(t));	-- 画T的轨迹
-color is (255,0,0);
+sleep(1000);
+clear;
 --------------- 图形3：
+color is (255,0,0);
+ptsize is 4;
 origin is(580, 240);									-- 再右移
 scale is (80, 80);										-- 恢复原比例
 rot is 0;												-- 不旋转

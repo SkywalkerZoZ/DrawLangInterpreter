@@ -5,11 +5,10 @@ int main()
     Lexer lx("test.txt");
     Parser ps(lx);
     DrawEngine de;
-    // 蓝色
-    de.setColor(RGB(0, 0, 255));
     Interpreter itp(ps,de);
     itp.run();
     // 运行消息循环
+    // hWnd为nullptr，表示获取所有线程的消息
     MSG msg;
     while (GetMessage(&msg, nullptr, 0, 0)) {
         TranslateMessage(&msg);

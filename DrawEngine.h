@@ -2,16 +2,16 @@
 #define DRAWENGINE_H
 
 #include <Windows.h>
+#include <cstdint>
 
 //创建Windows窗口并向interpreter提供绘制接口
 class DrawEngine {
 public:
     DrawEngine();
-
     ~DrawEngine();
-
-    void drawPixel(int x, int y);
+    void drawPixel(int x, int y, uint8_t size);
     void setColor(COLORREF c);
+    void clearWindow();
 private:
     // 绘制的窗口的句柄
     HWND hwnd;

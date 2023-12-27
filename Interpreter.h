@@ -31,11 +31,14 @@ private:
     uint8_t color_r;
     uint8_t color_g;
     uint8_t color_b;
+    // PTSIZE IS $size;
+    uint8_t ptsize;
 public:
     explicit Interpreter(Parser &p,DrawEngine &de) 
     : parser(p),draw_eng(de), 
     param(TNode::param),origin_x(0),origin_y(0),scale_x(1),scale_y(1),
-    rot_agl(0),start(0),end(0),step(0),draw_x(nullptr),draw_y(nullptr){}
+    rot_agl(0),start(0),end(0),step(0),draw_x(nullptr),draw_y(nullptr),
+    color_r(0),color_b(0),color_g(0),ptsize(1){}
     void interpProgram();
     void interpStatement();
     void interpOrigin();
@@ -43,6 +46,9 @@ public:
     void interpRot();
     void interpFor();
     void interColor();
+    void interClear();
+    void interSleep();
+    void interPtsize();
     //根据计算坐标
     void calCoord(const NodePtr &h,const NodePtr &v,double &x,double &y);
     //根据计算的坐标使用draw_eng进行绘制

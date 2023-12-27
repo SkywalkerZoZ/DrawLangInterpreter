@@ -20,6 +20,9 @@
   TOKEN(FOR)                                                                   \
   TOKEN(FROM)                                                                  \
   TOKEN(COLOR)                                                                 \
+  TOKEN(CLEAR)                                                                 \
+  TOKEN(SLEEP)                                                                 \
+  TOKEN(PTSIZE)                                                                 \
   TOKEN(T)                                                                     \
   TOKEN(SEMICO)                                                                \
   TOKEN(L_BRACKET)                                                             \
@@ -86,7 +89,10 @@ static std::unordered_map<std::string, Token> token_tbl = {
     {"TO", {TO, "TO", 0.0, nullptr}},
     {"STEP", {STEP, "STEP", 0.0, nullptr}},
     {"DRAW", {DRAW, "DRAW", 0.0, nullptr}},
-    {"COLOR", {COLOR, "COLOR", 0.0, nullptr}}
+    {"COLOR", {COLOR, "COLOR", 0.0, nullptr}},
+    {"CLEAR", {CLEAR, "CLEAR", 0.0, nullptr}},
+    {"SLEEP", {SLEEP, "SLEEP", 0.0, nullptr}},
+    {"PTSIZE", {PTSIZE, "PTSIZE", 0.0, nullptr}},
 };
 
 // 完成词法分析，将源程序分解成记号流,向parser提供记号流
