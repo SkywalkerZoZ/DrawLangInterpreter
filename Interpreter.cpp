@@ -82,6 +82,7 @@ void Interpreter::interpFor()
     step=parser.parseExpression()->eval();
     parser.match(DRAW);
     parser.match(L_BRACKET);
+    //含T的函数表达式
     draw_x=parser.parseExpression();
     parser.match(COMMA);
     draw_y=parser.parseExpression();

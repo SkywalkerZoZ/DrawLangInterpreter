@@ -39,6 +39,7 @@ void Lexer::backCh(char ch)
 }
 
 Token Lexer::checkToken(std::string n) {
+	// 时间复杂度O(1)
 	auto it = token_tbl.find(n);
 	if (it != token_tbl.end())
 	{
@@ -164,7 +165,6 @@ Token Lexer::getToken()
 					// 一直读到下一行的第一个字符并将其退回
 					ch = getCh();
 				}
-				backCh(ch);
 				return getToken();
 			}
 			else
@@ -183,7 +183,6 @@ Token Lexer::getToken()
 					// 一直读到下一行的第一个字符并将其退回
 					ch = getCh();
 				}
-				backCh(ch);
 				return getToken();
 			}
 			else

@@ -302,7 +302,7 @@ ID = letter+(letter|digit)*
 
 **DFA**
 
-![DFA](./img/DFA.png)
+![DFA](./img/dfa.png)
 
 
 
@@ -374,6 +374,8 @@ Atom->
 
 **支持COLOR语句**
 
+更改颜色
+
 ```c++
 void Interpreter::interColor()
 {
@@ -398,31 +400,83 @@ void Interpreter::interColor()
 
 
 
+**支持CLEAR语句**
+
+清屏
+
+```c++
+void Interpreter::interClear()
+{
+    parser.match(CLEAR);
+    draw_eng.clearWindow();
+}
+```
+
+
+
+
+
+**支持SLEEP语句**
+
+休眠
+
+```c++
+void Interpreter::interSleep()
+{
+    parser.match(SLEEP);
+    parser.match(L_BRACKET);
+    int time=parser.parseExpression()->eval();
+    parser.match(R_BRACKET);
+    Sleep(time);
+}
+```
+
+
+
+**支持PTSIZE语句**
+
+调整像素点大小
+
+```c++
+void Interpreter::interPtsize()
+{
+    parser.match(PTSIZE);
+    parser.match(IS);
+    ptsize=parser.parseExpression()->eval();
+
+}
+```
+
+
+
 **符号表**
 
 使用哈希表实现，查找效率更高
 
 ```c++
-//符号表，使用哈希表实现
 static std::unordered_map<std::string, Token> token_tbl = {
-    {"PI",     {CONST_ID, "PI",    3.1415926, nullptr}},
-    {"E",      {CONST_ID, "E",     2.71828,   nullptr}},
-    {"T",      {T,        "T",     0.0,       nullptr}},
-    {"SIN",    {FUNC,     "SIN",   0.0,       std::sin}},
-    {"COS",    {FUNC,     "COS",   0.0,       std::cos}},
-    {"TAN",    {FUNC,     "TAN",   0.0,       std::tan}},
-    {"LN",     {FUNC,     "LN",    0.0,       std::log}},
-    {"EXP",    {FUNC,     "EXP",   0.0,       std::exp}},
-    {"SQRT",   {FUNC,     "SQRT",  0.0,       std::sqrt}},
-    {"ORIGIN", {ORIGIN,   "ORIGIN",0.0,       nullptr}},
-    {"SCALE",  {SCALE,    "SCALE", 0.0,       nullptr}},
-    {"ROT",    {ROT,      "ROT",   0.0,       nullptr}},
-    {"IS",     {IS,       "IS",    0.0,       nullptr}},
-    {"FOR",    {FOR,      "FOR",   0.0,       nullptr}},
-    {"FROM",   {FROM,     "FROM",  0.0,       nullptr}},
-    {"TO",     {TO,       "TO",    0.0,       nullptr}},
-    {"STEP",   {STEP,     "STEP",  0.0,       nullptr}},
-    {"DRAW",   {DRAW,     "DRAW",  0.0,       nullptr}}
+    {"PI", {CONST_ID, "PI", 3.1415926, nullptr}},
+    {"E", {CONST_ID, "E", 2.71828, nullptr}},
+    {"T", {T, "T", 0.0, nullptr}},
+    {"SIN", {FUNC, "SIN", 0.0, std::sin}},
+    {"COS", {FUNC, "COS", 0.0, std::cos}},
+    {"TAN", {FUNC, "TAN", 0.0, std::tan}},
+    {"LN", {FUNC, "LN", 0.0, std::log}},
+    {"EXP", {FUNC, "EXP", 0.0, std::exp}},
+    {"SQRT", {FUNC, "SQRT", 0.0, std::sqrt}},
+    {"ORIGIN", {ORIGIN, "ORIGIN", 0.0, nullptr}},
+    {"SCALE", {SCALE, "SCALE", 0.0, nullptr}},
+    {"ROT", {ROT, "ROT", 0.0, nullptr}},
+    {"IS", {IS, "IS", 0.0, nullptr}},
+    {"FOR", {FOR, "FOR", 0.0, nullptr}},
+    {"FROM", {FROM, "FROM", 0.0, nullptr}},
+    {"TO", {TO, "TO", 0.0, nullptr}},
+    {"STEP", {STEP, "STEP", 0.0, nullptr}},
+    {"DRAW", {DRAW, "DRAW", 0.0, nullptr}},
+    {"COLOR", {COLOR, "COLOR", 0.0, nullptr}},
+    {"CLEAR", {CLEAR, "CLEAR", 0.0, nullptr}},
+    {"SLEEP", {SLEEP, "SLEEP", 0.0, nullptr}},
+    {"PTSIZE", {PTSIZE, "PTSIZE", 0.0, nullptr}},
 };
 ```
 
@@ -431,43 +485,42 @@ static std::unordered_map<std::string, Token> token_tbl = {
 **宏**
 
 ```c++
-//宏定义，便于维护枚举和字符串数组
-#define FOREACH_TOKEN(TOKEN) \
-        TOKEN(ORIGIN)   \
-        TOKEN(SCALE)    \
-        TOKEN(ROT)      \
-        TOKEN(IS)       \
-        TOKEN(TO)       \
-        TOKEN(STEP)     \
-        TOKEN(DRAW)     \
-        TOKEN(FOR)      \
-        TOKEN(FROM)     \
-        TOKEN(T)        \
-        TOKEN(SEMICO)   \
-        TOKEN(L_BRACKET)\
-        TOKEN(R_BRACKET)\
-        TOKEN(COMMA)    \
-        TOKEN(PLUS)     \
-        TOKEN(MINUS)    \
-        TOKEN(MUL)      \
-        TOKEN(DIV)      \
-        TOKEN(POWER)    \
-        TOKEN(FUNC)     \
-        TOKEN(CONST_ID) \
-        TOKEN(NONTOKEN) \
-        TOKEN(ERRTOKEN)
+// 宏定义，便于维护枚举和字符串数组
+#define FOREACH_TOKEN(TOKEN)                                                   \
+  TOKEN(ORIGIN)                                                                \
+  TOKEN(SCALE)                                                                 \
+  TOKEN(ROT)                                                                   \
+  TOKEN(IS)                                                                    \
+  TOKEN(TO)                                                                    \
+  TOKEN(STEP)                                                                  \
+  TOKEN(DRAW)                                                                  \
+  TOKEN(FOR)                                                                   \
+  TOKEN(FROM)                                                                  \
+  TOKEN(COLOR)                                                                 \
+  TOKEN(CLEAR)                                                                 \
+  TOKEN(SLEEP)                                                                 \
+  TOKEN(PTSIZE)                                                                 \
+  TOKEN(T)                                                                     \
+  TOKEN(SEMICO)                                                                \
+  TOKEN(L_BRACKET)                                                             \
+  TOKEN(R_BRACKET)                                                             \
+  TOKEN(COMMA)                                                                 \
+  TOKEN(PLUS)                                                                  \
+  TOKEN(MINUS)                                                                 \
+  TOKEN(MUL)                                                                   \
+  TOKEN(DIV)                                                                   \
+  TOKEN(POWER)                                                                 \
+  TOKEN(FUNC)                                                                  \
+  TOKEN(CONST_ID)                                                              \
+  TOKEN(NONTOKEN)                                                              \
+  TOKEN(ERRTOKEN)
 // 生成枚举
 #define GENERATE_ENUM(ENUM) ENUM,
-enum TokenType {
-    FOREACH_TOKEN(GENERATE_ENUM)
-};
+enum TokenType { FOREACH_TOKEN(GENERATE_ENUM) };
 
 // 生成枚举对应的string数组
 #define GENERATE_STRING(STRING) #STRING,
-static std::string token_name[] = {
-    FOREACH_TOKEN(GENERATE_STRING)
-};
-
+static std::string token_name[] = {FOREACH_TOKEN(GENERATE_STRING)};
 ```
 
 
@@ -604,14 +657,14 @@ using NodePtr = std::unique_ptr<ASTNode>;
 使用DrawEngine创建Windows窗口并向interpreter提供绘制接口
 
 ```c++
+//创建Windows窗口并向interpreter提供绘制接口
 class DrawEngine {
 public:
     DrawEngine();
-
     ~DrawEngine();
-
-    void drawPixel(int x, int y);
+    void drawPixel(int x, int y, uint8_t size);
     void setColor(COLORREF c);
+    void clearWindow();
 private:
     // 绘制的窗口的句柄
     HWND hwnd;
@@ -623,5 +676,8 @@ private:
     // 处理窗口消息
     static LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 };
+
+
+#endif
 ```
 

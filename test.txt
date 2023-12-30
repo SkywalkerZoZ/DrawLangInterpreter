@@ -10,6 +10,8 @@ origin is (20, 280);									-- 再下移40单位
 for T from 0 to 2*pi step pi/50 draw (t, -sin(t));		-- 画T的轨迹
 sleep(1000);   --保持一秒
 clear;
+
+
 --------------- 图形2：
 color is (0,255,0);  --绿色
 ptsize is 2;
@@ -23,6 +25,8 @@ rot is pi/2-2*pi/3;										-- 再旋转2/3*pi
 for T from -pi to pi step pi/50 draw (cos(t), sin(t));	-- 画T的轨迹
 sleep(1000);
 clear;
+
+
 --------------- 图形3：
 color is (255,0,0);
 ptsize is 4;

@@ -54,6 +54,7 @@ NodePtr Parser::parseExpression()
     {
         //记录当前记号，因为match会改变cur_token
         tk_tmp=cur_token.type;
+        //加或者减
         match(tk_tmp);
         NodePtr right = parseTerm();
         left = std::make_unique<BinOpNode>(tk_tmp,std::move(left), std::move(right));
@@ -75,6 +76,7 @@ NodePtr Parser::parseTerm()
 }
 NodePtr Parser::parseFactor()
 {
+    //由于有一元减，所以先定义一个右子树
     NodePtr right;
     if (cur_token.type == PLUS)
     {

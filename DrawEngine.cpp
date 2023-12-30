@@ -19,12 +19,14 @@ void DrawEngine::setColor(COLORREF c)
 
 void DrawEngine::drawPixel(int x, int y, uint8_t size)
 {
+    // 计算矩形区域
     int left = x - size / 2;
     int top = y - size / 2;
     int right = left + size;
     int bottom = top + size;
-
+    // 定义矩形
     RECT rect = { left, top, right, bottom };
+    // 创建画刷句柄
     HBRUSH hBrush = CreateSolidBrush(color);
     FillRect(hdc, &rect, hBrush);
     DeleteObject(hBrush);
@@ -76,7 +78,7 @@ void DrawEngine::createWindow()
     ShowWindow(hwnd, SW_SHOW);
 }
 
-
+// 回调函数，处理窗口特定消息
 LRESULT DrawEngine::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch (uMsg)

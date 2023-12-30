@@ -22,7 +22,7 @@
   TOKEN(COLOR)                                                                 \
   TOKEN(CLEAR)                                                                 \
   TOKEN(SLEEP)                                                                 \
-  TOKEN(PTSIZE)                                                                 \
+  TOKEN(PTSIZE)                                                                \
   TOKEN(T)                                                                     \
   TOKEN(SEMICO)                                                                \
   TOKEN(L_BRACKET)                                                             \
@@ -100,7 +100,7 @@ class Lexer {
 public:
   explicit Lexer(const std::string &src_file);
   ~Lexer();
-  // 读取一个字符
+  // 读取一个字符并且转为大写
   char getCh();
   // 添加到缓存区
   void addBuf(char ch);
